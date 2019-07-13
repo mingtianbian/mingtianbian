@@ -276,10 +276,10 @@ img#logo {
 #logo:hover {
     box-shadow: 0 0 10px #fff;
     -webkit-box-shadow: 0 0 19px #fff;
-    transform:rotate(360deg);
-    -ms-transform:rotate(360deg); 	/* IE 9 */
-    -moz-transform:rotate(360deg); 	/* Firefox */
-    -webkit-transform:rotate(360deg); /* Safari ? Chrome */
-    -o-transform:rotate(360deg); 	/* Opera */
+    transform:rotate(360000deg);
+    -ms-transform:rotate(360000deg); 	/* IE 9 */
+    -moz-transform:rotate(360000deg); 	/* Firefox */
+    -webkit-transform:rotate(360000deg); /* Safari ? Chrome */
+    -o-transform:rotate(360000deg); 	/* Opera */
     filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
