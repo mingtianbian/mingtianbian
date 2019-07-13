@@ -17,7 +17,7 @@ button {
   cursor: pointer;
   -webkit-transition: all .5s;
   transition: all .5s;
-  font-family:Î¢ÈíÑÅºÚ;
+  font-family:å¾®è½¯é›…é»‘;
 }
 
 /* btn-1 */
@@ -252,7 +252,7 @@ button {
 }
 .cs{
 	text-align:center;
-    font-family:Î¢ÈíÑÅºÚ;
+    font-family:å¾®è½¯é›…é»‘;
 	color:rgba(0, 150, 136, 0.59);
 }
 .cs h3{
@@ -273,7 +273,7 @@ img#logo {
 	margin-bottom: 20px;
 	transition: all 1.0s;  
 }
-#Ã÷Ìì±âµÄbilibili:hover {
+#åŒå­¦ç…§.jpg:hover {
     box-shadow: 0 0 10px #fff;
     -webkit-box-shadow: 0 0 19px #fff;
     transform:rotate(360deg);
