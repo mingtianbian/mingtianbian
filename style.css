@@ -275,7 +275,7 @@ img#logo {
 }
 #logo:hover {
     box-shadow: 0 0 10px #fff;
-    -webkit-box-shadow: 0 0 19px #fff;
+    -webkit-box-shadow: 0 255 248px #00FCF5;
     transform:rotate(360000deg);
     -ms-transform:rotate(360000deg); 	/* IE 9 */
     -moz-transform:rotate(360000deg); 	/* Firefox */
