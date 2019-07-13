@@ -273,7 +273,7 @@ img#logo {
 	margin-bottom: 20px;
 	transition: all 1.0s;  
 }
-#同学照.jpg:hover {
+#同学照:hover {
     box-shadow: 0 0 10px #fff;
     -webkit-box-shadow: 0 0 19px #fff;
     transform:rotate(360deg);
