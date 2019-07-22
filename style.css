@@ -283,3 +283,23 @@ img#logo {
     -o-transform:rotate(360000deg); 	/* Opera */
     filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=5);
 }
+
+body{
+		
+		background-color: gray;
+	}
+ 
+	#logo{
+		text-align: center;
+		display: table-cell;
+		vertical-align: middle;
+		width:400px;
+		height: 400px;
+		background-color: red;
+		
+	}
+ 
+	img{
+		max-width: 100%;
+		max-height: 100%;
+	}
