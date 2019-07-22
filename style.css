@@ -284,18 +284,12 @@ img#logo {
     filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=5);
 }
 
-body{
-		
-		background-color: gray;
-	}
- 
+body 
 	#logo{
 		text-align: center;
 		display: table-cell;
 		vertical-align: middle;
-		width:400px;
-		height: 400px;
-		background-color: red;
+		
 		
 	}
  
