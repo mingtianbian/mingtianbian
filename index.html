@@ -36,18 +36,48 @@
             font-size: 1.2em;
             margin-bottom: 20px;
         }
+        .link-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Add spacing between links */
+        }
         a {
             text-decoration: none;
-            color: #007bff;
             font-weight: bold;
-            border: 2px solid #007bff;
             padding: 10px 20px;
             border-radius: 25px;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, margin-right 0.3s;
+            display: inline-flex;
+            align-items: center;
+            border: 2px solid transparent;
         }
-        a:hover {
-            background-color: #007bff;
+        .bilibili {
+            border-color: #00A1D6;
+            color: #00A1D6;
+        }
+        .bilibili:hover {
+            background-color: #00A1D6;
             color: white;
+        }
+        .github {
+            border-color: #333;
+            color: #333;
+        }
+        .github:hover {
+            background-color: #333;
+            color: white;
+        }
+        .link-container img {
+            margin-right: 10px;
+            height: 24px;
+            width: 24px;
+            background-color: transparent;
+        }
+        .bilibili:hover img {
+            margin-right: 15px;
+        }
+        .github:hover img {
+            margin-right: 15px;
         }
     </style>
 </head>
@@ -55,7 +85,17 @@
     <div class="container">
         <h1>明天扁</h1>
         <p>欢迎来到我的个人主页！</p>
-        <p>你可以在<a href="https://space.bilibili.com/135667864" target="_blank">哔哩哔哩</a>找到我。</p>
+        <p>你可以在以下链接找到我：</p>
+        <div class="link-container">
+            <a href="https://space.bilibili.com/135667864" target="_blank" class="bilibili">
+                <img src="assets/images/Bilibili_logo.svg" alt="Bilibili">
+                哔哩哔哩
+            </a>
+            <a href="https://github.com/mingtianbian" target="_blank" class="github">
+                <img src="assets/images/github_icon.svg" alt="GitHub">
+                GitHub
+            </a>
+        </div>
     </div>
 </body>
 </html>
