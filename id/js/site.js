@@ -11,9 +11,8 @@ document.getElementById('validateButton').addEventListener('click', function () 
     lines.forEach(line => {
         const result = validateIdNumber(line);
         const resultDiv = document.createElement('div');
-        resultDiv.className = 'result';
+        resultDiv.className = `result ${result.type}`;
         resultDiv.textContent = result.message;
-        resultDiv.style.color = result.color;
         resultArea.appendChild(resultDiv);
     });
 });
@@ -21,29 +20,29 @@ document.getElementById('validateButton').addEventListener('click', function () 
 function validateIdNumber(idNumber) {
     // 1. 检查非法字符
     if (/[^\dXx]/.test(idNumber)) {
-        return { message: `${idNumber} 含有非法字符`, color: 'red' };
+        return { message: `${idNumber} 含有非法字符`, type: 'red' };
     }
 
     // 2. 检查长度
     if (idNumber.length < 17 || idNumber.length > 18) {
-        return { message: `${idNumber} 长度错误`, color: 'red' };
+        return { message: `${idNumber} 长度错误`, type: 'red' };
     }
 
     // 3. 检查前17位是否有 X/x
     if (idNumber.substring(0, 17).search(/X|x/) >= 0) {
-        return { message: `${idNumber} X位置错误`, color: 'red' };
+        return { message: `${idNumber} X位置错误`, type: 'red' };
     }
 
     // 4. 检查生日
     const birthDate = idNumber.substring(6, 14);
     if (!isValidDate(birthDate)) {
-        return { message: `${idNumber} 出生日期无效`, color: 'red' };
+        return { message: `${idNumber} 出生日期无效`, type: 'red' };
     }
 
     // 5. 如果是17位，计算18位
     if (idNumber.length === 17) {
         const calculatedCheckDigit = calculateCheckDigit(idNumber);
-        return { message: `${idNumber}${calculatedCheckDigit} 校验位计算`, color: '#9ACD32' };
+        return { message: `${idNumber}${calculatedCheckDigit} 校验位计算`, type: 'yellow' };
     }
 
     // 6. 如果是18位，进行校验操作
@@ -53,12 +52,12 @@ function validateIdNumber(idNumber) {
 
     if (inputCheckDigit === calculatedCheckDigit) {
         if (idNumber[17] === 'x') {
-            return { message: `${idNumber.substring(0, 17)}X 小写更正`, color: 'purple' };
+            return { message: `${idNumber.substring(0, 17)}X 小写更正`, type: 'purple' };
         } else {
-            return { message: `${idNumber} 校验正确`, color: 'green' };
+            return { message: `${idNumber} 校验正确`, type: 'green' };
         }
     } else {
-        return { message: `${idNumber} 校验位 ${idNumber[17]} 与计算结果 ${calculatedCheckDigit} 不匹配`, color: 'red' };
+        return { message: `${idNumber} 校验位 ${idNumber[17]} 与计算结果 ${calculatedCheckDigit} 不匹配`, type: 'red' };
     }
 }
 
