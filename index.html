@@ -1,115 +1,199 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="明天扁的个人网站">
-    <meta name="keywords" content="明天扁,mingtianbian,明天扁网站,明天扁官网">
-    <meta property="og:site_name" content="明天扁" />
-    <meta property="og:title" content="明天扁" />
-    <meta property="og:description" content="欢迎来到明天扁的个人网站" />
-    <title>明天扁</title>
-    <link rel="icon" href="assets/images/thanks_zsd.png" type="image/png">
-    
-    <!-- Google Analytics 代码 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-11HMM2GT8K"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="明天扁的个人网站" />
+  <meta name="keywords" content="明天扁,mingtianbian,明天扁网站,明天扁官网" />
+  <title>明天扁</title>
+  <link rel="icon" href="assets/images/thanks_zsd.png" type="image/png" />
 
-      gtag('config', 'G-11HMM2GT8K');
-    </script>
+  <style>
+    :root{
+      --text:#333; --card:#fff; --border:#e5e7eb; --shadow:rgba(0,0,0,.18);
+      --brand-bili:#00A1D6; --brand-git:#333; --focus:#2563eb;
+      --radius:16px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --text:#e5e7eb; --card:#111; --border:#2a2a2a; --shadow:rgba(0,0,0,.5);
+        --brand-git:#e5e7eb;
+      }
+    }
 
+    *{ box-sizing:border-box }
+    html,body{ height:100%; margin:0; }
+    body{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      min-height:100svh; /* 移动端更稳的视口单位 */
+      transition: background 0.6s ease;
+      /* JS 会设置随机渐变，这里不设固定背景 */
+    }
+
+    .container{
+      width:100%;
+      max-width:520px;
+      margin: clamp(12px, 4vh, 32px);
+      padding: clamp(18px, 4vw, 32px);
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px var(--shadow);
+      text-align:center;
+    }
+
+    h1{
+      margin:0 0 .5em;
+      font-size: clamp(22px, 5vw, 36px);
+      line-height:1.2;
+    }
+    p{
+      margin:.4em 0 .9em;
+      font-size: clamp(14px, 3.6vw, 18px);
+      line-height:1.6;
+    }
+
+    .link-container{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(10px, 2.8vw, 16px);
+      margin-top:1rem;
+    }
+
+    a{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      text-decoration:none; font-weight:700;
+      padding: 12px 18px;
+      border-radius:999px;
+      border:2px solid transparent;
+      transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+      min-height:44px; /* 触控推荐尺寸 */
+      color:inherit;
+      -webkit-tap-highlight-color: transparent;
+      touch-action:manipulation;
+    }
+    a:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--focus); }
+
+    .link-container img{
+      width:22; height:22; display:block; transition: transform .2s ease;
+    }
+
+    /* B站按钮 */
+    .bilibili{ border-color:var(--brand-bili); color:var(--brand-bili); }
+    .bilibili:hover{ background:var(--brand-bili); color:#fff; transform:translateY(-1px); }
+    .bilibili:hover img{ transform:translateX(2px); }
+
+    /* GitHub 按钮（图标随主题切换） */
+    .github{ border-color:var(--brand-git); color:var(--brand-git); }
+    .github:hover{ background:var(--brand-git); color:#fff; transform:translateY(-1px); }
+    .github:hover img{ transform:translateX(2px); }
+    .github img{
+      /* 默认浅色模式用深色 logo */
+      content: url("assets/images/github-mark.svg");
+    }
+    @media (prefers-color-scheme: dark){
+      .github img{
+        /* 深色模式自动换白色版 */
+        content: url("assets/images/github-mark-white.svg");
+      }
+    }
+
+    /* 极窄屏单列 */
+    @media (max-width: 360px){
+      .link-container{ grid-template-columns: 1fr; }
+      a{ padding:14px 18px; }
+    }
+
+    /* 短而宽的横屏手机：避免被上下夹扁 */
+    @media (max-height: 520px){
+      body{ align-items:flex-start; }
+      .container{ margin: 12px auto; }
+    }
+
+    /* 减少动画 */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important }
+    }
+  </style>
+
+  <noscript>
     <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            color: #333;
-        }
-        p {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-        .link-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px; /* Add spacing between links */
-        }
-        a {
-            text-decoration: none;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 25px;
-            transition: background-color 0.3s, color 0.3s, margin-right 0.3s;
-            display: inline-flex;
-            align-items: center;
-            border: 2px solid transparent;
-        }
-        .bilibili {
-            border-color: #00A1D6;
-            color: #00A1D6;
-        }
-        .bilibili:hover {
-            background-color: #00A1D6;
-            color: white;
-        }
-        .github {
-            border-color: #333;
-            color: #333;
-        }
-        .github:hover {
-            background-color: #333;
-            color: white;
-        }
-        .link-container img {
-            margin-right: 10px;
-            height: 24px;
-            width: 24px;
-            background-color: transparent;
-        }
-        .bilibili:hover img {
-            margin-right: 15px;
-        }
-        .github:hover img {
-            margin-right: 15px;
-        }
+      /* JS 被禁用时给一个默认渐变兜底 */
+      body{ background: linear-gradient(135deg, #f6d365, #fda085); }
     </style>
+  </noscript>
 </head>
 <body>
-    <div class="container">
-        <h1>明天扁</h1>
-        <p>欢迎来到我的个人主页！</p>
-        <p>你可以在以下链接找到我：</p>
-        <div class="link-container">
-            <a href="https://space.bilibili.com/135667864" target="_blank" class="bilibili">
-                <img src="assets/images/Bilibili_logo.svg" alt="Bilibili">
-                哔哩哔哩
-            </a>
-            <a href="https://github.com/mingtianbian" target="_blank" class="github">
-                <img src="assets/images/github_icon.svg" alt="GitHub">
-                GitHub
-            </a>
-        </div>
-    </div>
+  <main class="container">
+    <h1>明天扁</h1>
+    <p>欢迎来到我的个人主页！</p>
+    <p>你可以在以下链接找到我：</p>
+
+    <nav class="link-container" aria-label="社交链接">
+      <a class="bilibili" href="https://space.bilibili.com/135667864" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/Bilibili_logo.svg" alt="Bilibili" width="22" height="22" />
+        <span>哔哩哔哩</span>
+      </a>
+      <a class="github" href="https://github.com/mingtianbian" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/github-mark.svg" alt="GitHub" width="22" height="22" />
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </main>
+
+  <script>
+    // 渐变组合
+    const gradients = [
+      ["#f6d365", "#fda085"], // 黄橙
+      ["#a1c4fd", "#c2e9fb"], // 蓝白
+      ["#fbc2eb", "#a6c1ee"], // 粉紫
+      ["#84fab0", "#8fd3f4"], // 青蓝
+      ["#ff9a9e", "#fecfef"], // 粉红
+      ["#667eea", "#764ba2"], // 蓝紫
+      ["#89f7fe", "#66a6ff"], // 青蓝2
+      ["#ffecd2", "#fcb69f"], // 浅橙粉
+      ["#ff9a9e", "#fad0c4"], // 粉红-奶白
+      ["#ffdde1", "#ee9ca7"], // 粉玫红
+      ["#a18cd1", "#fbc2eb"], // 紫粉
+      ["#fad0c4", "#ffd1ff"], // 桃粉
+      ["#a6c0fe", "#f68084"], // 蓝粉
+      ["#d4fc79", "#96e6a1"], // 黄绿
+      ["#fccb90", "#d57eeb"], // 橙紫
+      ["#e0c3fc", "#8ec5fc"], // 紫蓝
+      ["#f093fb", "#f5576c"], // 粉红-玫红
+      ["#43e97b", "#38f9d7"], // 绿-青
+      ["#30cfd0", "#330867"], // 青-深蓝紫
+      ["#5ee7df", "#b490ca"], // 青绿-淡紫
+      ["#cfd9df", "#e2ebf0"]  // 灰蓝
+    ];
+
+  function pickOncePerSession() {
+    const KEY = "mtbGradient"; // 每次新打开/刷新页面都会重新抽
+    const cached = sessionStorage.getItem(KEY);
+    if (cached) return JSON.parse(cached);
+
+    const chosen = gradients[Math.floor(Math.random() * gradients.length)];
+    sessionStorage.setItem(KEY, JSON.stringify(chosen));
+    return chosen;
+  }
+
+  function initialAngle() {
+    // 角度只取一次，避免窗口变化时变换
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    return isPortrait ? 135 : 160;
+  }
+
+  function applyGradient() {
+    const [c1, c2] = pickOncePerSession();
+    const angle = initialAngle();
+    document.body.style.background = `linear-gradient(${angle}deg, ${c1}, ${c2})`;
+  }
+
+  // 仅在首次加载时应用；不监听 resize / orientationchange
+  window.addEventListener("DOMContentLoaded", applyGradient);
+</script>
 </body>
 </html>
