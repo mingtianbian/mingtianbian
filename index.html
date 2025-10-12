@@ -145,7 +145,7 @@
     }
 
     /* GitHub 按钮（带浅底托 + 悬停变黑/白） */
-    .github{
+    .github {
       position: relative;
       border-color: var(--brand-git);
       color: var(--brand-git);
@@ -154,22 +154,28 @@
       -webkit-backdrop-filter: blur(8px);
       transition: background-color .25s ease, color .25s ease, transform .2s ease;
     }
-    .github:hover{
+    
+    /* 悬停效果 */
+    .github:hover {
       background-color: var(--brand-git);
       color: #fff;
       transform: translateY(-1px);
     }
-    .github:hover img{
+    
+    /* 鼠标悬停时图标切换 */
+    .github:hover img {
       transform: translateX(2px);
+      content: url("assets/images/github-mark-white.svg"); /* 浅色模式下悬停显示白色图标 */
     }
-
-    /* GitHub 图标根据主题切换 */
-    .github img{
+    
+    /* GitHub 图标根据主题切换（非悬停） */
+    .github img {
       content: url("assets/images/github-mark.svg");
     }
-    @media (prefers-color-scheme: dark){
-      .github img{
-        content: url("assets/images/github-mark-white.svg");
+    
+    @media (prefers-color-scheme: dark) {
+      .github img {
+        content: url("assets/images/github-mark-white.svg"); /* 暗色模式默认白色 */
       }
     }
 
