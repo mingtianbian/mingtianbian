@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="明天扁的个人网站" />
+  <meta name="keywords" content="明天扁,mingtianbian,明天扁网站,明天扁官网" />
+  <title>明天扁</title>
+  <link rel="icon" href="assets/images/thanks_zsd.png" type="image/png" />
+
+  <style>
+    :root{
+      --text:#333; --card:#fff; --border:#e5e7eb; --shadow:rgba(0,0,0,.18);
+      --brand-bili:#00A1D6; --brand-git:#333; --focus:#2563eb;
+      --radius:16px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --text:#e5e7eb; --card:#111; --border:#2a2a2a; --shadow:rgba(0,0,0,.5);
+        --brand-git:#e5e7eb;
+      }
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100%; margin:0; }
+    body{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      min-height:100svh;
+      transition: background 0.6s ease;
+    }
+
+    .container{
+      position: relative; /* 液态玻璃需要定位 */
+      width:100%;
+      max-width:520px;
+      margin: clamp(12px, 4vh, 32px);
+      padding: clamp(18px, 4vw, 32px);
+
+      /* 液态玻璃核心效果 */
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 8px 32px var(--shadow);
+
+      text-align:center;
+      overflow:hidden; /* 避免液态层溢出 */
+    }
+
+    /* 液态流动高光层 */
+    .container::before{
+      content:"";
+      position:absolute;
+      top:-50%;
+      left:-50%;
+      width:200%;
+      height:200%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(255,255,255,0.3),
+        rgba(173,216,230,0.25),
+        rgba(255,192,203,0.3),
+        rgba(255,255,255,0.2)
+      );
+      animation: liquidRotate 10s linear infinite;
+      mix-blend-mode: overlay;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index:0;
+    }
+
+    /* 确保内容在上面 */
+    .container > *{
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes liquidRotate{
+      0%{ transform: rotate(0deg); }
+      100%{ transform: rotate(360deg); }
+    }
+
+    h1{
+      margin:0 0 .5em;
+      font-size: clamp(22px, 5vw, 36px);
+      line-height:1.2;
+    }
+    p{
+      margin:.4em 0 .9em;
+      font-size: clamp(14px, 3.6vw, 18px);
+      line-height:1.6;
+    }
+
+    .link-container{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(10px, 2.8vw, 16px);
+      margin-top:1rem;
+    }
+
+    a{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      text-decoration:none; font-weight:700;
+      padding: 12px 18px;
+      border-radius:999px;
+      border:2px solid transparent;
+      transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+      min-height:44px;
+      color:inherit;
+      -webkit-tap-highlight-color: transparent;
+      touch-action:manipulation;
+    }
+    a:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--focus); }
+
+    .link-container img{
+      width:22; height:22; display:block; transition: transform .2s ease;
+    }
+
+    /* B站按钮（带浅底托 + 悬停变蓝 + 图标切换） */
+    .bilibili{
+      position: relative;
+      border-color: var(--brand-bili);
+      color: var(--brand-bili);
+      background-color: rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background-color .25s ease, color .25s ease, transform .2s ease;
+    }
+    .bilibili img {
+      height: 20px;
+      margin-right: 8px;
+      transition: filter .25s ease;
+    }
+    .bilibili:hover{
+      background-color: var(--brand-bili);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .bilibili:hover img {
+      filter: brightness(0) invert(1); /* 强制变白 */
+    }
+
+    /* GitHub 按钮（带浅底托 + 悬停变黑/白） */
+    .github {
+      position: relative;
+      border-color: var(--brand-git);
+      color: var(--brand-git);
+      background-color: rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background-color .25s ease, color .25s ease, transform .2s ease;
+    }
+    
+    /* 悬停效果 */
+    .github:hover {
+      background-color: var(--brand-git);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    
+    /* 鼠标悬停时图标切换 */
+    .github:hover img {
+      transform: translateX(2px);
+      content: url("assets/images/github-mark-white.svg"); /* 浅色模式下悬停显示白色图标 */
+    }
+    
+    /* GitHub 图标根据主题切换（非悬停） */
+    .github img {
+      content: url("assets/images/github-mark.svg");
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .github img {
+        content: url("assets/images/github-mark-white.svg"); /* 暗色模式默认白色 */
+      }
+    }
+
+    /* 极窄屏单列 */
+    @media (max-width: 360px){
+      .link-container{ grid-template-columns: 1fr; }
+      a{ padding:14px 18px; }
+    }
+
+    /* 短而宽的横屏手机 */
+    @media (max-height: 520px){
+      body{ align-items:flex-start; }
+      .container{ margin: 12px auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important }
+    }
+  </style>
+
+  <noscript>
+    <style>
+      body{ background: linear-gradient(135deg, #f6d365, #fda085); }
+    </style>
+  </noscript>
+</head>
+<body>
+  <main class="container">
+    <h1>明天扁</h1>
+    <p>欢迎来到我的个人主页！</p>
+    <p>你可以在以下链接找到我：</p>
+
+    <nav class="link-container" aria-label="社交链接">
+      <a class="bilibili" href="https://space.bilibili.com/135667864" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/Bilibili_logo.svg" alt="Bilibili" width="22" height="22" />
+        <span>哔哩哔哩</span>
+      </a>
+      <a class="github" href="https://github.com/mingtianbian" target="_blank" rel="noopener noreferrer">
+        <img src="assets/images/github-mark.svg" alt="GitHub" width="22" height="22" />
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </main>
+
+  <script>
+    // 背景渐变组合
+    const gradients = [
+      ["#f6d365", "#fda085"],
+      ["#a1c4fd", "#c2e9fb"],
+      ["#fbc2eb", "#a6c1ee"],
+      ["#84fab0", "#8fd3f4"],
+      ["#ff9a9e", "#fecfef"],
+      ["#667eea", "#764ba2"],
+      ["#89f7fe", "#66a6ff"],
+      ["#ffecd2", "#fcb69f"],
+      ["#ff9a9e", "#fad0c4"],
+      ["#ffdde1", "#ee9ca7"],
+      ["#a18cd1", "#fbc2eb"],
+      ["#fad0c4", "#ffd1ff"],
+      ["#a6c0fe", "#f68084"],
+      ["#d4fc79", "#96e6a1"],
+      ["#fccb90", "#d57eeb"],
+      ["#e0c3fc", "#8ec5fc"],
+      ["#f093fb", "#f5576c"],
+      ["#43e97b", "#38f9d7"],
+      ["#30cfd0", "#330867"],
+      ["#5ee7df", "#b490ca"],
+      ["#cfd9df", "#e2ebf0"]
+    ];
+
+    function pickOncePerSession() {
+      const KEY = "mtbGradient";
+      const saved = sessionStorage.getItem(KEY);
+      if (saved) return JSON.parse(saved);
+      const choice = gradients[Math.floor(Math.random() * gradients.length)];
+      sessionStorage.setItem(KEY, JSON.stringify(choice));
+      return choice;
+    }
+
+    const [c1, c2] = pickOncePerSession();
+    document.body.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+  </script>
+</body>
+</html>
