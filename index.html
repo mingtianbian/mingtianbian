@@ -213,43 +213,102 @@
     </nav>
   </main>
 
-  <script>
-    // 背景渐变组合
-    const gradients = [
-      ["#f6d365", "#fda085"],
-      ["#a1c4fd", "#c2e9fb"],
-      ["#fbc2eb", "#a6c1ee"],
-      ["#84fab0", "#8fd3f4"],
-      ["#ff9a9e", "#fecfef"],
-      ["#667eea", "#764ba2"],
-      ["#89f7fe", "#66a6ff"],
-      ["#ffecd2", "#fcb69f"],
-      ["#ff9a9e", "#fad0c4"],
-      ["#ffdde1", "#ee9ca7"],
-      ["#a18cd1", "#fbc2eb"],
-      ["#fad0c4", "#ffd1ff"],
-      ["#a6c0fe", "#f68084"],
-      ["#d4fc79", "#96e6a1"],
-      ["#fccb90", "#d57eeb"],
-      ["#e0c3fc", "#8ec5fc"],
-      ["#f093fb", "#f5576c"],
-      ["#43e97b", "#38f9d7"],
-      ["#30cfd0", "#330867"],
-      ["#5ee7df", "#b490ca"],
-      ["#cfd9df", "#e2ebf0"]
+<script>
+// 浅色模式
+const lightGradients = [
+  ["#f6d365", "#fda085"], // 金黄色到浅珊瑚橙 (Warm Sun)
+  ["#a1c4fd", "#c2e9fb"], // 浅天蓝到柔和青色 (Sky Breeze)
+  ["#43e97b", "#38f9d7"], // 亮绿到高饱和青色 (Vivid Aqua)
+  ["#fbc2eb", "#a6c1ee"], // 浅粉紫到柔和蓝紫 (Pastel Dream)
+  ["#84fab0", "#8fd3f4"], // 浅薄荷绿到天蓝色 (Mint Sky)
+  ["#ff9a9e", "#fecfef"], // 柔和红粉到浅紫红 (Candy Floss)
+  ["#89f7fe", "#66a6ff"], // 浅青色到中蓝色 (Ocean Wave)
+  ["#ffecd2", "#fcb69f"], // 奶油黄到浅橙色 (Peachy Cream)
+  ["#ff9a9e", "#fad0c4"], // 柔和红粉到浅桃色 (Blush Pink)
+  ["#ffdde1", "#ee9ca7"], // 极浅粉色到玫瑰红 (Light Rose)
+  ["#fad0c4", "#ffd1ff"], // 浅桃色到浅丁香紫 (Lilac Touch)
+  ["#a6c0fe", "#f68084"], // 柔和蓝到浅珊瑚红 (Blue Ember)
+  ["#d4fc79", "#96e6a1"], // 浅黄绿到柔和绿 (Lime Green)
+  ["#fccb90", "#d57eeb"], // 杏黄到淡紫色 (Apricot Mist)
+  ["#e0c3fc", "#8ec5fc"], // 浅紫到浅蓝 (Lavender Blue)
+  ["#cfd9df", "#e2ebf0"]  // 灰白到极浅灰 (Cloudy White)
+];
+
+// 深色模式
+const darkGradients = [
+  ["#667eea", "#764ba2"], // 宝蓝到深紫 (Deep Indigo)
+  ["#a18cd1", "#fbc2eb"], // 薰衣草紫到浅粉紫 (Soft Violet)
+  ["#f093fb", "#f5576c"], // 紫红到深红 (Magenta Heat)
+  ["#30cfd0", "#330867"], // 亮青到极深蓝紫 (Neon Dark)
+  ["#5ee7df", "#b490ca"], // 亮青色到中紫 (Teal Iris)
+  ["#2c3e50", "#4ca1af"], // 深蓝灰到青灰色 (Slate Blue)
+  ["#0f2027", "#203a43", "#2c5364"], // 三色渐变：深黑到蓝黑到深蓝 (Night Sky)
+  ["#4b6cb7", "#182848"], // 中蓝到深海军蓝 (Classic Navy)
+  ["#4ecdc4", "#556270"], // 青色到深灰 (Teal Slate)
+  ["#ff758c", "#ff7eb3"], // 珊瑚红到亮粉 (Vibrant Coral)
+  ["#1e3c72", "#2a5298"]  // 深蓝到中蓝 (Royal Blue)
+];
+
+    // 渐变方向列表 (to top, to bottom, to right, 对角线等)
+    const gradientDirections = [
+      "135deg",  // 左下到右上
+      "45deg",   // 左上到右下
+      "90deg",   // 左到右
+      "0deg",    // 下到上
+      "-45deg",  // 右下到左上
+      "180deg"   // 上到下
     ];
 
-    function pickOncePerSession() {
-      const KEY = "mtbGradient";
-      const saved = sessionStorage.getItem(KEY);
-      if (saved) return JSON.parse(saved);
-      const choice = gradients[Math.floor(Math.random() * gradients.length)];
-      sessionStorage.setItem(KEY, JSON.stringify(choice));
-      return choice;
+    function pickGradientBasedOnTheme() {
+      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      let gradients;
+
+      if (isDarkMode) {
+        gradients = darkGradients;
+      } else {
+        gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
+      }
+
+      // SessionStorage 键
+      const GRADIENT_KEY = "mtbGradient";
+      const THEME_KEY = "mtbTheme";
+      const DIRECTION_KEY = "mtbGradientDirection"; // 新增方向的键
+
+      const savedTheme = sessionStorage.getItem(THEME_KEY);
+      const savedGradient = sessionStorage.getItem(GRADIENT_KEY);
+      const savedDirection = sessionStorage.getItem(DIRECTION_KEY); // 读取已保存的方向
+
+      let chosenColors;
+      let chosenDirection;
+      
+      // 检查主题是否改变，或者是否有任何一项未保存
+      if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
+        // 1. 随机选择颜色
+        chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
+        // 2. 随机选择方向
+        chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
+        
+        // 3. 保存到 SessionStorage
+        sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
+        sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
+        sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
+      } else {
+        // 使用已保存的值
+        chosenColors = JSON.parse(savedGradient);
+        chosenDirection = savedDirection;
+      }
+
+      // 返回一个包含颜色和方向的对象
+      return { colors: chosenColors, direction: chosenDirection };
     }
 
-    const [c1, c2] = pickOncePerSession();
-    document.body.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
-  </script>
+    const { colors: gradientArray, direction } = pickGradientBasedOnTheme();
+
+    // 格式化渐变字符串：将方向和颜色组合
+    const colorString = gradientArray.join(", ");
+    
+    // 生成最终的 background 属性值
+    document.body.style.background = `linear-gradient(${direction}, ${colorString})`;
+</script>
 </body>
 </html>
