@@ -250,66 +250,66 @@ const darkGradients = [
 ];
 
 // 渐变方向列表 (to top, to bottom, to right, 对角线等)
-    const gradientDirections = [
-      "135deg",  // 左下到右上
-      "45deg",   // 左上到右下
-      "90deg",   // 左到右
-      "0deg",    // 下到上
-      "-45deg",  // 右下到左上
-      "180deg"   // 上到下
-    ];
+const gradientDirections = [
+  "135deg",  // 左下到右上
+  "45deg",   // 左上到右下
+  "90deg",   // 左到右
+  "0deg",    // 下到上
+  "-45deg",  // 右下到左上
+  "180deg"   // 上到下
+];
 
-    function pickGradientBasedOnTheme() {
-      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      let gradients;
+function pickGradientBasedOnTheme() {
+  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  let gradients;
 
-      if (isDarkMode) {
-        gradients = darkGradients;
-      } else {
-        gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
-      }
+  if (isDarkMode) {
+    gradients = darkGradients;
+  } else {
+    gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
+  }
 
-      // SessionStorage 键 -> 更改为 LocalStorage 键
-      const GRADIENT_KEY = "mtbGradient";
-      const THEME_KEY = "mtbTheme";
-      const DIRECTION_KEY = "mtbGradientDirection"; 
+  // 使用 sessionStorage 键（修复点：从 localStorage 改回 sessionStorage）
+  const GRADIENT_KEY = "mtbGradient";
+  const THEME_KEY = "mtbTheme";
+  const DIRECTION_KEY = "mtbGradientDirection"; 
 
-      // 将 sessionStorage.getItem 更改为 localStorage.getItem
-      const savedTheme = localStorage.getItem(THEME_KEY);
-      const savedGradient = localStorage.getItem(GRADIENT_KEY);
-      const savedDirection = localStorage.getItem(DIRECTION_KEY); 
+  // 使用 sessionStorage 读取已保存的值
+  const savedTheme = sessionStorage.getItem(THEME_KEY);
+  const savedGradient = sessionStorage.getItem(GRADIENT_KEY);
+  const savedDirection = sessionStorage.getItem(DIRECTION_KEY); 
 
-      let chosenColors;
-      let chosenDirection;
-      
-      // 检查主题是否改变，或者是否有任何一项未保存 (首次访问时这些都是 null)
-      if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
-        // 1. 随机选择颜色
-        chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
-        // 2. 随机选择方向
-        chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
-        
-        // 3. 将 sessionStorage.setItem 更改为 localStorage.setItem
-        localStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
-        localStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
-        localStorage.setItem(DIRECTION_KEY, chosenDirection);
-      } else {
-        // 使用已保存的值
-        chosenColors = JSON.parse(savedGradient);
-        chosenDirection = savedDirection;
-      }
-
-      // 返回一个包含颜色和方向的对象
-      return { colors: chosenColors, direction: chosenDirection };
-    }
-
-    const { colors: gradientArray, direction } = pickGradientBasedOnTheme();
-
-    // 格式化渐变字符串：将方向和颜色组合
-    const colorString = gradientArray.join(", ");
+  let chosenColors;
+  let chosenDirection;
+  
+  // 检查主题是否改变，或者是否有任何一项未保存
+  if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
+    // 1. 随机选择颜色
+    chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
+    // 2. 随机选择方向
+    chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
     
-    // 生成最终的 background 属性值
-    document.body.style.background = `linear-gradient(${direction}, ${colorString})`;
+    // 3. 使用 sessionStorage 保存新值
+    sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
+    sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
+    sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
+  } else {
+    // 使用已保存的值
+    chosenColors = JSON.parse(savedGradient);
+    chosenDirection = savedDirection;
+  }
+
+  // 返回一个包含颜色和方向的对象
+  return { colors: chosenColors, direction: chosenDirection };
+}
+
+const { colors: gradientArray, direction } = pickGradientBasedOnTheme();
+
+// 格式化渐变字符串：将方向和颜色组合
+const colorString = gradientArray.join(", ");
+
+// 生成最终的 background 属性值
+document.body.style.background = `linear-gradient(${direction}, ${colorString})`;
 </script>
 </body>
 </html>
