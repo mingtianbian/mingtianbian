@@ -249,7 +249,7 @@ const darkGradients = [
   ["#1e3c72", "#2a5298"]  // 深蓝到中蓝 (Royal Blue)
 ];
 
-    // 渐变方向列表 (to top, to bottom, to right, 对角线等)
+// 渐变方向列表 (to top, to bottom, to right, 对角线等)
     const gradientDirections = [
       "135deg",  // 左下到右上
       "45deg",   // 左上到右下
@@ -269,29 +269,30 @@ const darkGradients = [
         gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
       }
 
-      // SessionStorage 键
+      // SessionStorage 键 -> 更改为 LocalStorage 键
       const GRADIENT_KEY = "mtbGradient";
       const THEME_KEY = "mtbTheme";
-      const DIRECTION_KEY = "mtbGradientDirection"; // 新增方向的键
+      const DIRECTION_KEY = "mtbGradientDirection"; 
 
-      const savedTheme = sessionStorage.getItem(THEME_KEY);
-      const savedGradient = sessionStorage.getItem(GRADIENT_KEY);
-      const savedDirection = sessionStorage.getItem(DIRECTION_KEY); // 读取已保存的方向
+      // 将 sessionStorage.getItem 更改为 localStorage.getItem
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      const savedGradient = localStorage.getItem(GRADIENT_KEY);
+      const savedDirection = localStorage.getItem(DIRECTION_KEY); 
 
       let chosenColors;
       let chosenDirection;
       
-      // 检查主题是否改变，或者是否有任何一项未保存
+      // 检查主题是否改变，或者是否有任何一项未保存 (首次访问时这些都是 null)
       if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
         // 1. 随机选择颜色
         chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
         // 2. 随机选择方向
         chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
         
-        // 3. 保存到 SessionStorage
-        sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
-        sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
-        sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
+        // 3. 将 sessionStorage.setItem 更改为 localStorage.setItem
+        localStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
+        localStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
+        localStorage.setItem(DIRECTION_KEY, chosenDirection);
       } else {
         // 使用已保存的值
         chosenColors = JSON.parse(savedGradient);
