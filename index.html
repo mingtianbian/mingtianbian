@@ -259,6 +259,11 @@ const gradientDirections = [
   "180deg"   // 上到下
 ];
 
+// SessionStorage 键
+const GRADIENT_KEY = "mtbGradient";
+const THEME_KEY = "mtbTheme";
+const DIRECTION_KEY = "mtbGradientDirection"; 
+
 function pickGradientBasedOnTheme() {
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
   let gradients;
@@ -268,11 +273,6 @@ function pickGradientBasedOnTheme() {
   } else {
     gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
   }
-
-  // 使用 sessionStorage 键（修复点：从 localStorage 改回 sessionStorage）
-  const GRADIENT_KEY = "mtbGradient";
-  const THEME_KEY = "mtbTheme";
-  const DIRECTION_KEY = "mtbGradientDirection"; 
 
   // 使用 sessionStorage 读取已保存的值
   const savedTheme = sessionStorage.getItem(THEME_KEY);
@@ -284,25 +284,29 @@ function pickGradientBasedOnTheme() {
   
   // 检查主题是否改变，或者是否有任何一项未保存
   if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
-    // 1. 随机选择颜色
+    // 1. 随机选择新值
     chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
-    // 2. 随机选择方向
     chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
-    
-    // 3. 使用 sessionStorage 保存新值
-    sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
-    sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
-    sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
+
+    // 2. 关键修改：使用 setTimeout 延迟保存操作
+    // 这样做可以确保数据在页面完成渲染并准备好接收下一指令时被写入，提高首次刷新读取成功的几率。
+    setTimeout(() => {
+        sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
+        sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
+        sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
+    }, 50); // 50毫秒的延迟通常足够
+
   } else {
     // 使用已保存的值
     chosenColors = JSON.parse(savedGradient);
     chosenDirection = savedDirection;
   }
 
-  // 返回一个包含颜色和方向的对象
+  // 立即返回所选/所读的值，以便立即应用背景
   return { colors: chosenColors, direction: chosenDirection };
 }
 
+// 立即调用并获取结果
 const { colors: gradientArray, direction } = pickGradientBasedOnTheme();
 
 // 格式化渐变字符串：将方向和颜色组合
