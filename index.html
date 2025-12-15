@@ -294,7 +294,7 @@ function pickGradientBasedOnTheme() {
         sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
         sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
         sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
-    }, 50); // 50毫秒的延迟通常足够
+    }, 100); // 100毫秒的延迟
 
   } else {
     // 使用已保存的值
