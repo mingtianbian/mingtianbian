@@ -2,318 +2,234 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="description" content="明天扁的个人网站" />
-  <meta name="keywords" content="明天扁,mingtianbian,明天扁网站,明天扁官网" />
+  <meta name="keywords" content="明天扁,mingtianbian,明天扁网站" />
   <title>明天扁</title>
   <link rel="icon" href="assets/images/thanks_zsd.png" type="image/png" />
 
-  <style>
-    :root{
-      --text:#333; --card:#fff; --border:#e5e7eb; --shadow:rgba(0,0,0,.18);
-      --brand-bili:#00A1D6; --brand-git:#333; --focus:#2563eb;
-      --radius:16px;
-    }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --text:#e5e7eb; --card:#111; --border:#2a2a2a; --shadow:rgba(0,0,0,.5);
+<script>
+    (function() {
+      const colorPairs = [
+        { light: ["#f6d365", "#fda085"], dark: ["#a0522d", "#3e2723"] }, 
+        { light: ["#a1c4fd", "#c2e9fb"], dark: ["#1a237e", "#01579b"] }, 
+        { light: ["#84fab0", "#8fd3f4"], dark: ["#1b5e20", "#006064"] }, 
+        { light: ["#e0c3fc", "#8ec5fc"], dark: ["#4a148c", "#1a237e"] }, 
+        { light: ["#ff9a9e", "#fecfef"], dark: ["#880e4f", "#4a148c"] }, 
+        { light: ["#cfd9df", "#e2ebf0"], dark: ["#263238", "#37474f"] }, 
+        { light: ["#fa709a", "#fee140"], dark: ["#bf360c", "#3e2723"] }, 
+        { light: ["#667eea", "#764ba2"], dark: ["#283593", "#4527a0"] }, 
+        { light: ["#4facfe", "#00f2fe"], dark: ["#0d47a1", "#006064"] }, 
+        { light: ["#d4fc79", "#96e6a1"], dark: ["#33691e", "#1b5e20"] }  
+      ];
+
+      let pIdx = sessionStorage.getItem('mtb_pair_index');
+      if (pIdx === null) {
+        pIdx = Math.floor(Math.random() * colorPairs.length);
+        sessionStorage.setItem('mtb_pair_index', pIdx);
       }
+      const pair = colorPairs[parseInt(pIdx)];
+
+      function injectTheme() {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const c = isDark ? pair.dark : pair.light;
+        const styleId = 'theme-preloader';
+        let styleTag = document.getElementById(styleId);
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = styleId;
+          document.head.appendChild(styleTag);
+        }
+        styleTag.innerHTML = `:root { --bg-a: ${c[0]}; --bg-b: ${c[1]}; }`;
+      }
+
+      injectTheme();
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', injectTheme);
+    })();
+  </script>
+
+  <style>
+    :root {
+      --text: #333; --card: rgba(255, 255, 255, 0.15); --border: rgba(255, 255, 255, 0.25);
+      --brand-bili: #00A1D6; --brand-git: #333; --radius: 24px;
+      /* 浅色模式图标路径 */
+      --git-icon: url("assets/images/github-mark.svg");
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root { 
+        --text: #f3f4f6; --brand-git: #eee; --card: rgba(0, 0, 0, 0.25); --border: rgba(255, 255, 255, 0.1);
+        /* 深色模式图标路径切换为白色版 */
+        --git-icon: url("assets/images/github-mark-white.svg");
+      }
+        /* 深色模式下的特殊悬停：填充 GitHub 灰 (#444) */
+      .github:hover { 
+        background: #444 !important; 
+        color: #fff !important; 
+        border-color: #555 !important;
+      }
+      .github:hover img { content: url("assets/images/github-mark.svg") !important; }
     }
 
-    *{ box-sizing:border-box }
-    html,body{ height:100%; margin:0; }
-    body{
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-      color:var(--text);
-      display:flex; align-items:center; justify-content:center;
-      min-height:100svh;
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100svh; margin: 0; overflow: hidden;
+      background: linear-gradient(135deg, var(--bg-a), var(--bg-b));
       transition: background 0.6s ease;
     }
 
-    .container{
-      position: relative; /* 液态玻璃需要定位 */
-      width:100%;
-      max-width:520px;
-      margin: clamp(12px, 4vh, 32px);
-      padding: clamp(18px, 4vw, 32px);
-
-      /* 液态玻璃核心效果 */
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: var(--radius);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: 0 8px 32px var(--shadow);
-
-      text-align:center;
-      overflow:hidden; /* 避免液态层溢出 */
+    .container {
+      position: relative; width: 100%; max-width: 480px;
+      margin: 20px; padding: 40px 30px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); text-align: center; z-index: 10;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
     }
 
-    /* 液态流动高光层 */
-    .container::before{
-      content:"";
-      position:absolute;
-      top:-50%;
-      left:-50%;
-      width:200%;
-      height:200%;
-      background: conic-gradient(
-        from 0deg,
-        rgba(255,255,255,0.3),
-        rgba(173,216,230,0.25),
-        rgba(255,192,203,0.3),
-        rgba(255,255,255,0.2)
-      );
-      animation: liquidRotate 10s linear infinite;
-      mix-blend-mode: overlay;
-      filter: blur(60px);
-      pointer-events: none;
-      z-index:0;
+    h1 { margin: 0 0 10px; font-size: 32px; letter-spacing: -1px; }
+    p { opacity: 0.8; line-height: 1.6; margin: 5px 0 20px; }
+
+    .link-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+    .link-container a {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      text-decoration: none; font-weight: 600; padding: 14px; border-radius: 50px;
+      border: 1.5px solid currentColor; transition: all 0.3s ease; color: inherit;
     }
 
-    /* 确保内容在上面 */
-    .container > *{
-      position: relative;
-      z-index: 1;
-    }
-
-    @keyframes liquidRotate{
-      0%{ transform: rotate(0deg); }
-      100%{ transform: rotate(360deg); }
-    }
-
-    h1{
-      margin:0 0 .5em;
-      font-size: clamp(22px, 5vw, 36px);
-      line-height:1.2;
-    }
-    p{
-      margin:.4em 0 .9em;
-      font-size: clamp(14px, 3.6vw, 18px);
-      line-height:1.6;
-    }
-
-    .link-container{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: clamp(10px, 2.8vw, 16px);
-      margin-top:1rem;
-    }
-
-    a{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px;
-      text-decoration:none; font-weight:700;
-      padding: 12px 18px;
-      border-radius:999px;
-      border:2px solid transparent;
-      transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
-      min-height:44px;
-      color:inherit;
-      -webkit-tap-highlight-color: transparent;
-      touch-action:manipulation;
-    }
-    a:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--focus); }
-
-    .link-container img{
-      width:22; height:22; display:block; transition: transform .2s ease;
-    }
-
-    /* B站按钮（带浅底托 + 悬停变蓝 + 图标切换） */
-    .bilibili{
-      position: relative;
-      border-color: var(--brand-bili);
-      color: var(--brand-bili);
-      background-color: rgba(255,255,255,0.35);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: background-color .25s ease, color .25s ease, transform .2s ease;
-    }
-    .bilibili img {
-      height: 20px;
-      margin-right: 8px;
-      transition: filter .25s ease;
-    }
-    .bilibili:hover{
-      background-color: var(--brand-bili);
-      color: #fff;
-      transform: translateY(-1px);
-    }
-    .bilibili:hover img {
-      filter: brightness(0) invert(1); /* 强制变白 */
-    }
-
-    /* GitHub 按钮（带浅底托 + 悬停变黑/白） */
-    .github {
-      position: relative;
-      border-color: var(--brand-git);
-      color: var(--brand-git);
-      background-color: rgba(255,255,255,0.35);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: background-color .25s ease, color .25s ease, transform .2s ease;
-    }
+    .bilibili { color: var(--brand-bili); background: rgba(0,161,214,0.05); }
+    .bilibili:hover { background: var(--brand-bili); color: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,161,214,0.3); }
     
-    /* 悬停效果 */
-    .github:hover {
-      background-color: var(--brand-git);
-      color: #fff;
-      transform: translateY(-1px);
-    }
+    .github { color: var(--brand-git); background: rgba(0,0,0,0.05); }
+    .github:hover { background: #333; color: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+    /* 让 GitHub 图标根据 CSS 变量显示 */
+    .github img { content: var(--git-icon); }
+
+    .link-container img { width: 20px; height: 20px; transition: filter 0.3s; }
+    .bilibili:hover img { filter: brightness(0) invert(1); }
     
-    /* 鼠标悬停时图标切换 */
-    .github:hover img {
-      transform: translateX(2px);
-      content: url("assets/images/github-mark-white.svg"); /* 浅色模式下悬停显示白色图标 */
+    /* 深色模式下悬停 GitHub 按钮变白底黑字 */
+    @media (prefers-color-scheme: dark) {
+      .github:hover { color: #000 !important; background: #fff !important; }
     }
-    
-    /* GitHub 图标根据主题切换（非悬停） */
-    .github img {
-      content: url("assets/images/github-mark.svg");
+    /* 浅色模式下悬停 GitHub 图标变白 */
+    @media (prefers-color-scheme: light) { 
+      .github:hover img { filter: brightness(0) invert(1); } 
     }
-
-    /* 极窄屏单列 */
-    @media (max-width: 360px){
-      .link-container{ grid-template-columns: 1fr; }
-      a{ padding:14px 18px; }
-    }
-
-    /* 短而宽的横屏手机 */
-    @media (max-height: 520px){
-      body{ align-items:flex-start; }
-      .container{ margin: 12px auto; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      *{ transition:none !important; animation:none !important }
-    }
+    @media (max-width: 480px) { .link-container { grid-template-columns: 1fr; } }
   </style>
-
-  <noscript>
-    <style>
-      body{ background: linear-gradient(135deg, #f6d365, #fda085); }
-    </style>
-  </noscript>
 </head>
 <body>
-  <main class="container">
-    <h1>明天扁</h1>
-    <p>欢迎来到我的个人主页！</p>
-    <p>你可以在以下链接找到我：</p>
 
-    <nav class="link-container" aria-label="社交链接">
-      <a class="bilibili" href="https://space.bilibili.com/135667864" target="_blank" rel="noopener noreferrer">
-        <img src="assets/images/Bilibili_logo.svg" alt="Bilibili" width="22" height="22" />
+  <main class="container" id="mainCard">
+    <h1>明天扁</h1>
+    <p>欢迎来到我的个人主页</p>
+    <nav class="link-container">
+      <a class="bilibili" href="https://space.bilibili.com/135667864" target="_blank">
+        <img src="assets/images/Bilibili_logo.svg" alt="Bili" />
         <span>哔哩哔哩</span>
       </a>
-      <a class="github" href="https://github.com/mingtianbian" target="_blank" rel="noopener noreferrer">
-        <img src="assets/images/github-mark.svg" alt="GitHub" width="22" height="22" />
+      <a class="github" href="https://github.com/mingtianbian" target="_blank">
+        <img src="assets/images/github-mark.svg" alt="Git" />
         <span>GitHub</span>
       </a>
     </nav>
   </main>
 
-<script>
-// 浅色模式
-const lightGradients = [
-  ["#f6d365", "#fda085"], // 金黄色到浅珊瑚橙 (Warm Sun)
-  ["#a1c4fd", "#c2e9fb"], // 浅天蓝到柔和青色 (Sky Breeze)
-  ["#43e97b", "#38f9d7"], // 亮绿到高饱和青色 (Vivid Aqua)
-  ["#fbc2eb", "#a6c1ee"], // 浅粉紫到柔和蓝紫 (Pastel Dream)
-  ["#84fab0", "#8fd3f4"], // 浅薄荷绿到天蓝色 (Mint Sky)
-  ["#ff9a9e", "#fecfef"], // 柔和红粉到浅紫红 (Candy Floss)
-  ["#89f7fe", "#66a6ff"], // 浅青色到中蓝色 (Ocean Wave)
-  ["#ffecd2", "#fcb69f"], // 奶油黄到浅橙色 (Peachy Cream)
-  ["#ff9a9e", "#fad0c4"], // 柔和红粉到浅桃色 (Blush Pink)
-  ["#ffdde1", "#ee9ca7"], // 极浅粉色到玫瑰红 (Light Rose)
-  ["#fad0c4", "#ffd1ff"], // 浅桃色到浅丁香紫 (Lilac Touch)
-  ["#a6c0fe", "#f68084"], // 柔和蓝到浅珊瑚红 (Blue Ember)
-  ["#d4fc79", "#96e6a1"], // 浅黄绿到柔和绿 (Lime Green)
-  ["#fccb90", "#d57eeb"], // 杏黄到淡紫色 (Apricot Mist)
-  ["#e0c3fc", "#8ec5fc"], // 浅紫到浅蓝 (Lavender Blue)
-  ["#cfd9df", "#e2ebf0"]  // 灰白到极浅灰 (Cloudy White)
-];
+  <script>
+    (function() {
+      const container = document.getElementById('mainCard');
+      const buttons = container.querySelectorAll('a');
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.style.cssText = "position:fixed; opacity:0; pointer-events:none;";
+      svg.innerHTML = `
+        <defs>
+          <filter id="liquid-filter" filterUnits="userSpaceOnUse">
+            <feImage id="fe-map" result="map" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="65" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>`;
+      document.body.appendChild(svg);
 
-// 深色模式
-const darkGradients = [
-  ["#667eea", "#764ba2"], // 宝蓝到深紫 (Deep Indigo)
-  ["#a18cd1", "#fbc2eb"], // 薰衣草紫到浅粉紫 (Soft Violet)
-  ["#f093fb", "#f5576c"], // 紫红到深红 (Magenta Heat)
-  ["#30cfd0", "#330867"], // 亮青到极深蓝紫 (Neon Dark)
-  ["#5ee7df", "#b490ca"], // 亮青色到中紫 (Teal Iris)
-  ["#2c3e50", "#4ca1af"], // 深蓝灰到青灰色 (Slate Blue)
-  ["#0f2027", "#203a43", "#2c5364"], // 三色渐变：深黑到蓝黑到深蓝 (Night Sky)
-  ["#4b6cb7", "#182848"], // 中蓝到深海军蓝 (Classic Navy)
-  ["#4ecdc4", "#556270"], // 青色到深灰 (Teal Slate)
-  ["#ff758c", "#ff7eb3"], // 珊瑚红到亮粉 (Vibrant Coral)
-  ["#1e3c72", "#2a5298"]  // 深蓝到中蓝 (Royal Blue)
-];
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const dpi = window.devicePixelRatio || 1;
+      let lens = { x: -1000, y: -1000, w: 150, h: 150 };
+      let mouse = { x: -1000, y: -1000 };
 
-// 渐变方向列表 (to top, to bottom, to right, 对角线等)
-const gradientDirections = [
-  "135deg",  // 左下到右上
-  "45deg",   // 左上到右下
-  "90deg",   // 左到右
-  "0deg",    // 下到上
-  "-45deg",  // 右下到左上
-  "180deg"   // 上到下
-];
+      function syncSize() {
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width * dpi;
+        canvas.height = rect.height * dpi;
+        const filter = document.getElementById('liquid-filter');
+        filter.setAttribute('x', rect.left);
+        filter.setAttribute('y', rect.top);
+        filter.setAttribute('width', rect.width);
+        filter.setAttribute('height', rect.height);
+      }
 
-// SessionStorage 键
-const GRADIENT_KEY = "mtbGradient";
-const THEME_KEY = "mtbTheme";
-const DIRECTION_KEY = "mtbGradientDirection"; 
+      window.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
 
-function pickGradientBasedOnTheme() {
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  let gradients;
+      function loop() {
+        const rect = container.getBoundingClientRect();
+        let snapping = false;
 
-  if (isDarkMode) {
-    gradients = darkGradients;
-  } else {
-    gradients = lightGradients.length > 0 ? lightGradients : darkGradients;
-  }
+        buttons.forEach(btn => {
+          const b = btn.getBoundingClientRect();
+          const bX = (b.left + b.width/2) - rect.left;
+          const bY = (b.top + b.height/2) - rect.top;
+          if (Math.hypot(mouse.x - bX, mouse.y - bY) < 110) {
+            lens.x += (bX - lens.x) * 0.18;
+            lens.y += (bY - lens.y) * 0.18;
+            lens.w += (b.width + 35 - lens.w) * 0.18;
+            lens.h += (b.height + 35 - lens.h) * 0.18;
+            snapping = true;
+          }
+        });
 
-  // 使用 sessionStorage 读取已保存的值
-  const savedTheme = sessionStorage.getItem(THEME_KEY);
-  const savedGradient = sessionStorage.getItem(GRADIENT_KEY);
-  const savedDirection = sessionStorage.getItem(DIRECTION_KEY); 
+        if (!snapping) {
+          lens.x += (mouse.x - lens.x) * 0.12;
+          lens.y += (mouse.y - lens.y) * 0.12;
+          lens.w += (150 - lens.w) * 0.12;
+          lens.h += (150 - lens.h) * 0.12;
+        }
 
-  let chosenColors;
-  let chosenDirection;
-  
-  // 检查主题是否改变，或者是否有任何一项未保存
-  if (savedTheme !== (isDarkMode ? 'dark' : 'light') || !savedGradient || !savedDirection) {
-    // 1. 随机选择新值
-    chosenColors = gradients[Math.floor(Math.random() * gradients.length)];
-    chosenDirection = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
+        ctx.fillStyle = 'rgb(127,127,0)'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. 关键修改：使用 setTimeout 延迟保存操作
-    // 这样做可以确保数据在页面完成渲染并准备好接收下一指令时被写入，提高首次刷新读取成功的几率。
-    setTimeout(() => {
-        sessionStorage.setItem(GRADIENT_KEY, JSON.stringify(chosenColors));
-        sessionStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light');
-        sessionStorage.setItem(DIRECTION_KEY, chosenDirection);
-    }, 100); // 100毫秒的延迟
+        const grad = ctx.createRadialGradient(
+          lens.x * dpi, lens.y * dpi, 0,
+          lens.x * dpi, lens.y * dpi, Math.max(lens.w, lens.h) * dpi / 1.4
+        );
+        grad.addColorStop(0, 'rgb(255,255,0)'); 
+        grad.addColorStop(1, 'rgb(127,127,0)');
 
-  } else {
-    // 使用已保存的值
-    chosenColors = JSON.parse(savedGradient);
-    chosenDirection = savedDirection;
-  }
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.ellipse(lens.x * dpi, lens.y * dpi, lens.w*dpi/2, lens.h*dpi/2, 0, 0, Math.PI*2);
+        ctx.fill();
 
-  // 立即返回所选/所读的值，以便立即应用背景
-  return { colors: chosenColors, direction: chosenDirection };
-}
+        const feImage = document.getElementById('fe-map');
+        if (feImage) {
+          feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', canvas.toDataURL('image/png', 0.6));
+        }
+        requestAnimationFrame(loop);
+      }
 
-// 立即调用并获取结果
-const { colors: gradientArray, direction } = pickGradientBasedOnTheme();
-
-// 格式化渐变字符串：将方向和颜色组合
-const colorString = gradientArray.join(", ");
-
-// 生成最终的 background 属性值
-document.body.style.background = `linear-gradient(${direction}, ${colorString})`;
-</script>
+      container.style.backdropFilter = "url(#liquid-filter) blur(20px) saturate(160%)";
+      syncSize(); 
+      loop();
+      window.addEventListener('resize', syncSize);
+    })();
+  </script>
 </body>
 </html>
